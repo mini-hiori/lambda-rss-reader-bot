@@ -29,7 +29,7 @@ def main() -> None:
     webhook_url = ssm.get_parameter(
         Name='RSSDiscordWebhookURL',
         WithDecryption=True
-    )
+    )['Parameter']['Value']
     print("download-url success")
     url_list = get_target_url()
     rss_list: List[RssContent] = []

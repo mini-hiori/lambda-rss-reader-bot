@@ -19,9 +19,9 @@
     - 具体的には,以下を行う
         - KMSからCMKを作成する
         - Systems ManagerにWebhookのURLを登録する。このとき↑のCMKにより暗号化する
-        - 3.のLambdaのIAMロールに、Systems ManagerのReadOnlyAccessと↑のCMKの利用権限を付与する
-            - 後者は、KMSのコンソールから「キー管理者」にLambdaのIAMユーザーを指定すればよい
-                - [参考](https://dev.classmethod.jp/articles/parameterstore-with-kms/)
+        - 3.のLambdaのIAMロールに、Systems ManagerのReadOnlyAccessと↑のCMKを利用した復号の権限を付与する
+            - 後者は、kms:Decryptを付与すればよいが、AWS管理ポリシーに該当するものがないので自力でポリシーを作成する必要がある
+                - [参考](https://qiita.com/minamijoyo/items/c6c6770f04c24a695081)
 
 ### 感想
 - Lambda用コンテナをVSCode Remote Containerで直接開発に使うことはできた
