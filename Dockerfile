@@ -48,6 +48,7 @@ COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 # (Optional) Add Lambda Runtime Interface Emulator and use a script in the ENTRYPOINT for simpler local runs
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /usr/bin/aws-lambda-rie
 COPY entry.sh /
+COPY requirements.txt /
 RUN chmod 755 /usr/bin/aws-lambda-rie /entry.sh
 RUN apk add git
 RUN pip install -r requirements.txt
