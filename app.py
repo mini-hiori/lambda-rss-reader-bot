@@ -35,6 +35,8 @@ def main() -> None:
     rss_list: List[RssContent] = []
     for url in url_list:
         rss_list += get_rss(url, interval=60)
+        print(f"target_url:{url}")
+        print(f"feed_length{str(len(rss_list))}")
     # 得られたrssをサイトの区別なく古い順にソート(とにかく新しい順に投稿)
     rss_list = sorted(rss_list, key=lambda x: x.published_date)
     if len(rss_list) > 0:
