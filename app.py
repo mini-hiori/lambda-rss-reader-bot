@@ -26,6 +26,7 @@ def main() -> None:
     """
     handler関数に直接入れてしまうとデバッグ時に使えないのでいったんmainで受ける
     """
+    print(datetime.now())
     webhook_url = ssm.get_parameter(
         Name='RSSDiscordWebhookURL',
         WithDecryption=True
@@ -33,6 +34,7 @@ def main() -> None:
     print("download-url success")
     url_list = get_target_url()
     rss_list: List[RssContent] = []
+    print(url_list)
     for url in url_list:
         rss_list += get_rss(url, interval=60)
         print(f"target_url:{url}")
