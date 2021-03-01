@@ -7,13 +7,19 @@
 - Cloudwatch Events利用によるLambda定期実行を試す
 - AWSリソースから見やすいサービスに通知できるか試す(今回はDiscord)
 ### 使い方
-- リポジトリをduplicate,cloneなどして自分のリポジトリにする
-- [この記事](https://dev.classmethod.jp/articles/github-action-ecr-push/)を参考にGithub ActionsでECRプッシュする設定を行う
+1. リポジトリをduplicate,cloneなどして自分のリポジトリにする
+2. [この記事](https://dev.classmethod.jp/articles/github-action-ecr-push/)を参考にGithub ActionsでECRプッシュする設定を行う
     - バージョン運用は一旦置いておくため、[ECRにタグ付与する箇所はlatest固定にしています](https://github.com/mini-hiori/lambda-rss-reader-bot/blob/master/.github/workflows/main.yml)
-- Lambdaを新規作成する。コンテナイメージ利用を選択し、↑のURIを指定する
-- [この記事](https://dev.startialab.blog/etc/a105)を参考に、↑のLambdaにEventbridgeによるトリガーを設定する
+3. Lambdaを新規作成する。コンテナイメージ利用を選択し、↑のURIを指定する
+4. [この記事](https://dev.startialab.blog/etc/a105)を参考に、↑のLambdaにEventbridgeによるトリガーを設定する
     - 周期はデフォルトはrate(1 hour)。変更する場合はget_rssに渡すinterval値も合わせて変更すること
-- [この記事](https://dev.classmethod.jp/articles/secure-string-with-lambda-using-parameter-store/#%E4%BB%8A%E3%81%AEwebhook-url%E3%81%AE%E6%89%B1%E3%81%84)を参考に、送りたいWebhookのURLをSystems Managerに配置する
+5. [この記事](https://dev.classmethod.jp/articles/secure-string-with-lambda-using-parameter-store/#%E4%BB%8A%E3%81%AEwebhook-url%E3%81%AE%E6%89%B1%E3%81%84)を参考に、送りたいWebhookのURLをSystems Managerに配置する
+    - 具体的には,以下を行う
+        - KMSからCMKを作成する
+        - Systems ManagerにWebhookのURLを登録する。このとき↑のCMKにより暗号化する
+        - 3.のLambdaのIAMロールに、Systems ManagerのReadOnlyAccessと↑のCMKの利用権限を付与する
+            - 後者は、KMSのコンソールから「キー管理者」にLambdaのIAMユーザーを指定すればよい
+                - [参考](https://dev.classmethod.jp/articles/parameterstore-with-kms/)
 
 ### 感想
 - Lambda用コンテナをVSCode Remote Containerで直接開発に使うことはできた
