@@ -6,6 +6,8 @@
 - Lambdaのコンテナイメージサポートを使ってみる
 - Cloudwatch Events利用によるLambda定期実行を試す
 - AWSリソースから見やすいサービスに通知できるか試す(今回はDiscord)
+### 構成図
+- 
 ### 使い方
 1. リポジトリをduplicate,cloneなどして自分のリポジトリにする
 2. [この記事](https://dev.classmethod.jp/articles/github-action-ecr-push/)を参考にGithub ActionsでECRプッシュする設定を行う
