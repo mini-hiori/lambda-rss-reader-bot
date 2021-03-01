@@ -30,6 +30,7 @@ def main() -> None:
         Name='RSSDiscordWebhookURL',
         WithDecryption=True
     )
+    print("download-url success")
     url_list = get_target_url()
     rss_list: List[RssContent] = []
     for url in url_list:
