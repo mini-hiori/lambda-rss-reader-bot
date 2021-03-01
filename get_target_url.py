@@ -1,6 +1,7 @@
 from typing import List
 import boto3
 
+ssm = boto3.client('ssm')
 
 def get_target_url() -> List[str]:
     """
