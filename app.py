@@ -6,7 +6,9 @@ from get_rss import get_rss
 from typing import List
 import os
 from datetime import datetime, timezone, timedelta
+import boto3
 
+ssm = boto3.client('ssm')
 
 def handler(event, context):
     """
@@ -24,7 +26,10 @@ def main() -> None:
     """
     handler関数に直接入れてしまうとデバッグ時に使えないのでいったんmainで受ける
     """
-    webhook_url = os.environ["DiscordWebhookUrl"]
+    webhook_url = response = ssm.get_parameter(
+        Name='NotifyTrainDelayToSlack-WebhookURL',
+        WithDecryption=True
+    )
     url_list = get_target_url()
     rss_list: List[RssContent] = []
     for url in url_list:
