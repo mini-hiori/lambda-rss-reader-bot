@@ -26,7 +26,7 @@ def main() -> None:
     """
     handler関数に直接入れてしまうとデバッグ時に使えないのでいったんmainで受ける
     """
-    webhook_url = response = ssm.get_parameter(
+    webhook_url = ssm.get_parameter(
         Name='NotifyTrainDelayToSlack-WebhookURL',
         WithDecryption=True
     )
