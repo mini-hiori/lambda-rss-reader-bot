@@ -50,5 +50,6 @@ ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest
 COPY entry.sh /
 RUN chmod 755 /usr/bin/aws-lambda-rie /entry.sh
 RUN apk add git
+RUN pip install -r requirements.txt
 ENTRYPOINT [ "/entry.sh" ]
 CMD [ "app.handler" ]

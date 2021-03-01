@@ -1,5 +1,6 @@
 from typing import List
 
+
 def get_target_url() -> List[str]:
     """
     取得対象にするrssのURLを返却する
