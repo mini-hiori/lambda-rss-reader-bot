@@ -15,13 +15,15 @@
 3. Lambdaを新規作成する。コンテナイメージ利用を選択し、↑のECRのURIを指定する
 4. [この記事](https://dev.startialab.blog/etc/a105)を参考に、↑のLambdaにEventbridgeによるトリガーを設定する
     - 周期はデフォルトはrate(1 hour)。変更する場合はget_rssに渡すinterval値も合わせて変更すること
-5. [この記事](https://dev.classmethod.jp/articles/secure-string-with-lambda-using-parameter-store/#%E4%BB%8A%E3%81%AEwebhook-url%E3%81%AE%E6%89%B1%E3%81%84)を参考に、送りたいWebhookのURLをSystems Managerに配置する
-    - 具体的には,以下を行う
-        - KMSからCMKを作成する
-        - Systems ManagerにWebhookのURLを登録する。このとき↑のCMKにより暗号化する
-        - 3.のLambdaのIAMロールに、Systems ManagerのReadOnlyAccessと↑のCMKを利用した復号の権限を付与する
-            - 後者は、kms:Decryptを付与すればよいが、AWS管理ポリシーに該当するものがないので自力でポリシーを作成する必要がある
-                - [参考](https://qiita.com/minamijoyo/items/c6c6770f04c24a695081)
+5. [この記事](https://dev.classmethod.jp/articles/secure-string-with-lambda-using-parameter-store/#%E4%BB%8A%E3%81%AEwebhook-url%E3%81%AE%E6%89%B1%E3%81%84)を参考に、以下2つをSystems Managerパラメータストアに配置する
+    1. 送りたいDiscord-WebhookのURL
+        - 暗号化して配置したいので、先にKMSから暗号化キー(CMK)を作成して暗号化する
+    2. RSS取得先リンク(改行で区切って列挙する)
+        - こちらは平文でOK
+6. 5.の記事を参考に、3.LambdaのロールにSSM参照権限とCMKを利用した復号の権限を付与する
+    - SSM参照権限→SSMReadOnlyAccessでOK
+    - 後者はkms:Decrypt。AWS管理ポリシーに該当するものがないので自力でポリシーを作成する必要がある
+        - [参考](https://qiita.com/minamijoyo/items/c6c6770f04c24a695081)
 
 ### 感想
 - Lambda用コンテナをVSCode Remote Containerで直接開発に使うことはできた
@@ -30,6 +32,8 @@
     - ☆ECRのURIを変えないままイメージの中身だけ変えた場合(latest固定など)、lambdaのコンテナイメージを空更新して再読み込みしないとlambdaに変更が反映されない場合がある
         - 短期間に連続実行した場合はlambdaのインスタンス(=コンテナ)が切り替わらないためな可能性が高い
 - Lambdaの定期実行 via Eventbridgeもできた
+- 雑な環境変数用としてSSMパラメータストアを扱うのは大分アリ
+    - コンテナの環境変数に焼いたりするよりも遥かに変更が楽で、複数のAWSリソースから参照もできる
 
 ### TODO
 - Pythonの場合ベースイメージにalpineを使うのはやめたほうがいい。  
