@@ -7,7 +7,7 @@
 - Cloudwatch Events利用によるLambda定期実行を試す
 - AWSリソースから見やすいサービスに通知できるか試す(今回はDiscord)
 ### 構成図
-- 
+![](https://github.com/mini-hiori/zenn-content/blob/main/images/lambda-rss-reader-bot/architecture.png?raw=true)
 ### 使い方
 1. リポジトリをduplicate,cloneなどして自分のリポジトリにする
 2. [この記事](https://dev.classmethod.jp/articles/github-action-ecr-push/)を参考にGithub ActionsでECRプッシュする設定を行う
@@ -25,21 +25,11 @@
     - 後者はkms:Decrypt。AWS管理ポリシーに該当するものがないので自力でポリシーを作成する必要がある
         - [参考](https://qiita.com/minamijoyo/items/c6c6770f04c24a695081)
 
-### 感想
-- Lambda用コンテナをVSCode Remote Containerで直接開発に使うことはできた
-    - VSCode開く際のビルドがだいぶ重いのがつらい
-- Lambdaにコンテナでデプロイもできた ドキュメント通りなら難なく動くのでよかった
-    - ☆ECRのURIを変えないままイメージの中身だけ変えた場合(latest固定など)、lambdaのコンテナイメージを空更新して再読み込みしないとlambdaに変更が反映されない場合がある
-        - 短期間に連続実行した場合はlambdaのインスタンス(=コンテナ)が切り替わらないためな可能性が高い
-- Lambdaの定期実行 via Eventbridgeもできた
-- 雑な環境変数用としてSSMパラメータストアを扱うのは大分アリ
-    - コンテナの環境変数に焼いたりするよりも遥かに変更が楽で、複数のAWSリソースから参照もできる
-
 ### TODO
 - Pythonの場合ベースイメージにalpineを使うのはやめたほうがいい。  
 AWS公式のサンプルDockerfileがalpineだったので従ったが、buster系のほうが良いはず
     - https://future-architect.github.io/articles/20200513/
-- ECRプッシュのトリガーにタグ使うのが若干面倒 もうちょっといい方法を探す
+- ECRプッシュのトリガーにタグ使うのが若干面倒
 ### よくわからんポイント
 - Eventbridgeの実行開始タイミングが不明
     - 設定して1分くらいしたら勝手に動き始めたので普通に指定できない説が濃厚
