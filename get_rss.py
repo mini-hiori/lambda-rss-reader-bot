@@ -25,7 +25,10 @@ def get_rss(endpoint: str, interval: int = 60) -> List[RssContent]:
     for entry in feed.entries:
         if not entry.get("link"):
             continue
-        published = convert_time(entry.published_parsed)
+        if entry.get("published_parsed"):
+            published = convert_time(entry.published_parsed)
+        else:
+            published = convert_time(entry.updated_parsed)
         if (nowtime - published).total_seconds() // 60 <= interval or interval < 0:
             rss_content = RssContent(
                 title=entry.title,
